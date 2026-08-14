@@ -1,0 +1,55 @@
+/* =====================================================================
+   nixdisplay / site / theme.css
+   Project-specific theme override for the foss/v1 design system.
+   Only touches the tokens documented as "safe to override" in the
+   design-corbet-ch project-pages theming contract — retints the accent
+   hue to violet, distinct from every sibling (nixarch teal, nixk3s blue,
+   nixnas cyan, nixram emerald, nixremote lime, nixgpu red, nixniri sky).
+
+   Load order:
+     <link rel="stylesheet" href="https://v1.foss.design.corbet.ch/assets/base.css">
+     <link rel="stylesheet" href="./theme.css">
+
+   Contrast (WCAG 2.1, computed via relative luminance, both directions):
+     dark  #a78bfa on #0b1120 = 6.92:1   · #0b1120 on #a78bfa = 6.92:1
+     light #6d28d9 on #ffffff = 7.10:1   · #ffffff on #6d28d9 = 7.10:1
+   ===================================================================== */
+
+:root {
+  /* Dark mode (and default) accent — violet-400. */
+  --accent: #a78bfa;
+  --accent-hover: #c4b5fd;
+  --accent-dim: rgba(167, 139, 250, 0.12);
+  --accent-glow: rgba(167, 139, 250, 0.08);
+  --accent-text: #0b1120;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Darker violet for light mode — 7.10:1 on #ffffff, AAA for normal
+       text (computed via WCAG relative luminance, not eyeballed). */
+    --accent: #6d28d9;
+    --accent-hover: #5b21b6;
+    --accent-dim: rgba(109, 40, 217, 0.08);
+    --accent-glow: rgba(109, 40, 217, 0.06);
+    --accent-text: #ffffff;
+  }
+}
+
+/* Mirror both variants for the explicit data-theme toggle, so it wins
+   over the OS media query in both directions. */
+:root[data-theme="dark"] {
+  --accent: #a78bfa;
+  --accent-hover: #c4b5fd;
+  --accent-dim: rgba(167, 139, 250, 0.12);
+  --accent-glow: rgba(167, 139, 250, 0.08);
+  --accent-text: #0b1120;
+}
+
+:root[data-theme="light"] {
+  --accent: #6d28d9;
+  --accent-hover: #5b21b6;
+  --accent-dim: rgba(109, 40, 217, 0.08);
+  --accent-glow: rgba(109, 40, 217, 0.06);
+  --accent-text: #ffffff;
+}

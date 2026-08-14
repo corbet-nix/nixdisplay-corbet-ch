@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>nixdisplay &mdash; Monitor registry, output layouts and hotplug profiles, as Nix modules</title>
+  <meta name="description" content="nixdisplay is a set of Nix modules for a declarative Wayland desktop's displays: a fleet-wide monitor identity registry, per-host output geometry with build-time overlap checks, and kanshi profiles that switch the arrangement by what is plugged in. Extracted out of nixdesktop; its only flake input is nixpkgs. Pre-alpha, real code moving to a new address.">
+
+  <meta name="theme-color" content="#0b1120" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+
+  <meta property="og:title" content="nixdisplay">
+  <meta property="og:description" content="Monitor registry, output layouts and hotplug-reactive kanshi profiles for a declarative Wayland desktop. Extracted out of nixdesktop; reads nothing from its siblings.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nixdisplay.corbet.ch">
+
+  <link rel="stylesheet" href="https://v1.foss.design.corbet.ch/assets/base.css">
+  <link rel="stylesheet" href="./theme.css">
+</head>
+<body>
+
+<header class="hero">
+  <nav>
+    <a href="/" class="nav-brand">nixdisplay</a>
+    <div class="nav-links">
+      <a href="https://github.com/julian-corbet/nixdisplay-corbet-ch">GitHub</a>
+      <a href="#status">Status</a>
+      <a href="#roadmap">Roadmap</a>
+      <details class="nav-family">
+        <summary>nix* family</summary>
+        <nav class="nav-family-panel" aria-label="The nix* project family">
+          <a href="https://nixapps.corbet.ch">nixapps <span>cluster apps as typed Nix</span></a>
+          <a href="https://nixarch.corbet.ch">nixarch <span>Arch's AUR breadth, Nix's declarative config</span></a>
+          <a href="https://nixbackup.corbet.ch">nixbackup <span>verify the backup, not the exit code</span></a>
+          <a href="https://nixdisplay.corbet.ch" aria-current="page">nixdisplay <span>outputs switched by what's plugged in</span></a>
+          <a href="https://nixgpu.corbet.ch">nixgpu <span>share one GPU by priority</span></a>
+          <a href="https://nixk3s.corbet.ch">nixk3s <span>the host is a flake, the cluster is git</span></a>
+          <a href="https://nixllm.corbet.ch">nixllm <span>the model store IS the registry</span></a>
+          <a href="https://nixnas.corbet.ch">nixnas <span>declarative NAS on a USB stick</span></a>
+          <a href="https://nixnet.corbet.ch">nixnet <span>the best live path to a host</span></a>
+          <a href="https://nixniri.corbet.ch">nixniri <span>the KDL file you stopped hand-editing</span></a>
+          <a href="https://nixpush.corbet.ch">nixpush <span>one send call, any notification backend</span></a>
+          <a href="https://nixram.corbet.ch">nixram <span>RAM tuning that fits your machine</span></a>
+          <a href="https://nixremote.corbet.ch">nixremote <span>remote apps as real windows</span></a>
+          <a href="https://nixscroll.corbet.ch">nixscroll <span>a scrolling column of windows, declared</span></a>
+          <a href="https://nixsh.corbet.ch">nixsh <span>every shell on every machine, declared</span></a>
+          <a href="https://nixshare.corbet.ch">nixshare <span>NFS/CIFS shares that unstick themselves</span></a>
+          <a href="https://nixvibe.corbet.ch">nixvibe <span>a coding agent in a browser terminal</span></a>
+          <a href="https://nixvps.corbet.ch">nixvps <span>NixOS on sub-1GB VPSes</span></a>
+        </nav>
+      </details>
+    </div>
+  </nav>
+
+  <div class="hero-content">
+    <h1>nixdisplay</h1>
+    <p class="tagline">Your displays, declared &mdash; and switched by what's plugged in.</p>
+    <p class="subtitle">
+      Three Nix modules for a declarative Wayland desktop's screens: a
+      fleet-wide <strong>monitor registry</strong> keyed by EDID identity (a
+      panel roams between machines under one name), per-host
+      <strong>output layouts</strong> with build-time overlap and
+      positioning checks, and hotplug-reactive <strong>kanshi
+      profiles</strong> that pick the arrangement from the <em>set</em> of
+      connected outputs &mdash; the one thing a compositor's own config
+      can't express.
+    </p>
+    <div class="cta">
+      <a href="#status" class="btn btn-primary">Read the Status</a>
+      <a href="https://github.com/julian-corbet/nixdisplay-corbet-ch" class="btn btn-secondary">View on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="status" class="how-it-works">
+  <div class="container">
+    <h2>Status: pre-alpha, real code moving to a new address</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">&check;</div>
+        <h3>Not new code &mdash; a new home for existing code</h3>
+        <p>
+          Every option here is the same module that has been the estate's
+          monitor registry, output layouts, and dynamic-output daemon as
+          <code>nixdesktop</code>'s own <code>modules/monitors.nix</code>,
+          <code>modules/layouts.nix</code> and <code>home/kanshi.nix</code>.
+          It's moving out of <code>nixdesktop</code>, not being written
+          from a blank file.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">&check;</div>
+        <h3>Green flake check, on the parts a flake check can reach</h3>
+        <p>
+          <code>nix flake check</code> evaluates the two registries against
+          fixtures and asserts every fired message: the identity string
+          both compositors match on, and the logical rectangle an output
+          occupies once its scale and transform are applied. The kanshi
+          home-manager module is hand-verified &mdash; <code>flake
+          check</code> never evaluates <code>homeManagerModules</code> at
+          all.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">!</div>
+        <h3>The consumers aren't cut over yet</h3>
+        <p>
+          <code>nixdesktop</code>, <code>nixscroll</code> and the private
+          host configs still reference the old <code>nixdesktop.*</code>
+          namespace. Renaming their reads to <code>nixdisplay.*</code>, and
+          enabling <code>dynamicOutputs</code> on the hosts that want it,
+          is separate, deploy-gated work this page's existence doesn't
+          imply is finished.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <h2>What it declares</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>A monitor registry, keyed by identity</h3>
+        <p>
+          <code>nixdisplay.monitors.&lt;slug&gt;</code> holds a panel's
+          make/model/serial and any alias EDIDs, derives the
+          <code>"&lt;make&gt; &lt;model&gt; &lt;serial&gt;"</code> string
+          both niri and scroll match on, and asserts that no two
+          declarations can ever resolve to the same one &mdash; the
+          silent duplicate that attaches your workspaces to whichever
+          panel enumerated first.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>Layouts with arithmetic you can't check by eye</h3>
+        <p>
+          <code>nixdisplay.layouts.&lt;name&gt;</code> places each output
+          by mode/modeline, scale, position and transform &mdash; and
+          computes the <em>logical</em> rectangle each occupies to reject
+          overlaps at build time. niri silently auto-places an overlapping
+          output and logs one line; this catches it before it ships.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>Profiles chosen by what's connected</h3>
+        <p>
+          <code>nixdisplay.dynamicOutputs</code> emits kanshi profiles
+          from those same layouts. kanshi selects one by an <em>exact
+          cover</em> of the connected heads, so "laptop panel off while
+          docked" &mdash; a statement about the <em>set</em> of outputs,
+          which no compositor config can make &mdash; becomes just another
+          profile.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>One owner per output, enforced by design</h3>
+        <p>
+          kanshi and the compositor both write output state, and the last
+          writer wins (sway#6863, kanshi#43, niri#676). A host that turns
+          on <code>dynamicOutputs</code> leaves the compositor's own layout
+          unset. kanshi runs as its own graphical-session user service,
+          declared here, borrowing nothing from a sibling's session layer.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>Installs nothing, names no path</h3>
+        <p>
+          The registries touch no <code>pkgs</code>; the kanshi module
+          writes one dotfile and a unit whose <code>ExecStart</code> is
+          the bare name <code>kanshi</code>. The daemon is supplied by
+          whatever puts binaries on the box &mdash;
+          <a href="https://github.com/julian-corbet/nixarch-corbet-ch">nixarch</a>
+          for Arch/CachyOS, or plain NixOS
+          <code>environment.systemPackages</code>.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>Reads nothing from its siblings</h3>
+        <p>
+          Its only flake input is <code>nixpkgs</code>. It owns the tables
+          it reads, so unlike the compositor repos it needs no
+          <code>lib.probeFact</code> mechanism at all. The repos that read
+          <em>it</em> (nixscroll, niri, nixdesktop's session validator) do
+          so defensively, without taking a flake input on it.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install" class="install">
+  <div class="container">
+    <h2>Get started</h2>
+    <div class="install-grid">
+      <div class="install-method">
+        <h3>1. Add the flake input</h3>
+        <pre><code>inputs.nixdisplay.url = "github:julian-corbet/nixdisplay-corbet-ch";</code></pre>
+      </div>
+      <div class="install-method">
+        <h3>2. Import the registries and declare your hardware</h3>
+        <pre><code>imports = [ inputs.nixdisplay.nixosModules.default ];
+
+nixdisplay.monitors.dell = {
+  make = "Dell Inc."; model = "DELL U4323QE"; serial = "9BQR2P3";
+  nativeMode = "3840x2160@60";
+};
+nixdisplay.layouts.desk = {
+  description = "one 4K panel";
+  outputs = [ { monitor = "dell"; position = { x = 0; y = 0; }; } ];
+};</code></pre>
+      </div>
+      <div class="install-method">
+        <h3>3. Renamed from nixdesktop &mdash; no shim</h3>
+        <p>
+          The namespace moved from
+          <code>nixdesktop.{monitors,layouts,dynamicOutputs}</code> to
+          <code>nixdisplay.*</code>, matching this family's convention
+          (the top-level attribute is always the repo's own name).
+          Migrating means renaming every reference. No compatibility alias
+          exists at this stage.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="architecture">
+  <div class="container">
+    <h2>Where this fits</h2>
+    <div class="arch-details">
+      <div class="arch-detail">
+        <h3>1. Displays &mdash; nixdisplay</h3>
+        <p>
+          Which panels exist, where they sit, and which arrangement
+          applies when. Compositor-neutral: both niri and scroll read the
+          same registry. Reads nothing back from either.
+        </p>
+      </div>
+      <div class="arch-detail">
+        <h3>2. Compositor config &mdash; nixscroll / nixniri</h3>
+        <p>
+          Translates a named <code>nixdisplay.layout</code> into that
+          compositor's own <code>output</code> blocks, resolving identity
+          matches against <code>nixdisplay.monitors</code> &mdash;
+          defensively, with no flake input on this repo.
+        </p>
+      </div>
+      <div class="arch-detail">
+        <h3>3. Policy, session + chrome &mdash; nixdesktop</h3>
+        <p>
+          Which roles a session wants filled, the systemd session layer,
+          and the compositor-agnostic pieces (bars, notifiers, lock).
+          Validates a session's <code>layout</code> pointer against this
+          repo's registry.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap" class="architecture">
+  <div class="container">
+    <h2>Roadmap (planned, not yet built)</h2>
+    <div class="arch-details">
+      <div class="arch-detail">
+        <h3>Cut the consumers over</h3>
+        <p>
+          Point <code>nixdesktop</code>'s session validator,
+          <code>nixscroll</code>'s translator, and the private host configs
+          at <code>nixdisplay.*</code>, and delete nixdesktop's own copies
+          of these three modules.
+        </p>
+      </div>
+      <div class="arch-detail">
+        <h3>Enable dynamic profiles on the hosts that want them</h3>
+        <p>
+          The layouts for "laptop only", "external 4K", and
+          "external 4K + pivot" already exist; turning
+          <code>dynamicOutputs</code> on is a per-host, deploy-gated step.
+        </p>
+      </div>
+      <div class="arch-detail">
+        <h3>A home-manager module check</h3>
+        <p>
+          The kanshi config generation and its user-service wiring are
+          hand-verified today; a check that evaluates the module against a
+          minimal home-manager stub would close the gap
+          <code>flake check</code> leaves.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="https://github.com/julian-corbet/nixdisplay-corbet-ch">Source</a>
+      <a href="https://github.com/julian-corbet/nixdisplay-corbet-ch/issues">Issues</a>
+    </div>
+    <p>
+      <a href="https://github.com/julian-corbet/nixdisplay-corbet-ch/blob/main/LICENSE">MIT</a> &middot;
+      <a href="https://github.com/julian-corbet">Julian Corbet</a> &middot;
+      Built on <a href="https://sr.ht/~emersion/kanshi/">kanshi</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
