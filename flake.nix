@@ -35,13 +35,15 @@
       # this module itself, which is why there is deliberately no homeManagerModules.{monitors,layouts}.
       nixosModules.monitors = ./modules/monitors.nix;
       nixosModules.layouts = ./modules/layouts.nix;
+      nixosModules.roles = ./modules/roles.nix;
       # A convenience default for the common case (a host that addresses monitors by identity wants
       # both tables). No existing consumer imports `.default` — the import sites all name `.monitors`
       # and `.layouts` explicitly — so this bundling surprises nobody who does not ask for it.
-      nixosModules.default = { imports = [ ./modules/monitors.nix ./modules/layouts.nix ]; };
+      nixosModules.default = { imports = [ ./modules/monitors.nix ./modules/layouts.nix ./modules/roles.nix ]; };
       systemManagerModules.monitors = ./modules/monitors.nix;
       systemManagerModules.layouts = ./modules/layouts.nix;
-      systemManagerModules.default = { imports = [ ./modules/monitors.nix ./modules/layouts.nix ]; };
+      systemManagerModules.roles = ./modules/roles.nix;
+      systemManagerModules.default = { imports = [ ./modules/monitors.nix ./modules/layouts.nix ./modules/roles.nix ]; };
 
       # ── DYNAMIC OUTPUT PROFILES ───────────────────────────────────────────────────────────
       # kanshi profiles generated from `nixdisplay.layouts`, for the one thing a compositor's own
