@@ -96,10 +96,11 @@ at all. Cutting the consumers (nixdesktop, nixscroll, infra) over to this repo, 
 `dynamicOutputs` on the hosts that want it, is the follow-on, deploy-gated work. No compatibility
 shims at this stage.
 
-[nixdesktop]: https://github.com/julian-corbet/nixdesktop-corbet-ch
-[nixscroll]: https://github.com/julian-corbet/nixscroll-corbet-ch
-[nixniri]: https://github.com/julian-corbet/nixniri-corbet-ch
+[nixdesktop]: https://github.com/corbet-nix/nixdesktop-corbet-ch
+[nixscroll]: https://github.com/corbet-nix/nixscroll-corbet-ch
+[nixniri]: https://github.com/corbet-nix/nixciri-corbet-ch
 
-## License
 
-MIT
+## Licence
+
+Outbound licence is `MIT OR Apache-2.0`. See `LICENSE-MIT` and `LICENSE-APACHE`; every source file carries `SPDX-License-Identifier: MIT OR Apache-2.0`.

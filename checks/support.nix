@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # checks/support.nix — the three things every eval check in this repo needs, built once.
 #
 # WHAT THESE CHECKS ARE FOR. `nix flake check` does not evaluate `nixosModules`,

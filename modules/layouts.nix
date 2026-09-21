@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/layouts.nix — a named arrangement of outputs: which panels a desktop expects, and where,
 # at what size, turned which way.
 #

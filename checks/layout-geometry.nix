@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Evaluates modules/layouts.nix for real and proves the arithmetic nobody can check by eye: the
 # logical rectangle an output occupies once its scale and its transform have been applied, and the
 # overlap test built on top of it.

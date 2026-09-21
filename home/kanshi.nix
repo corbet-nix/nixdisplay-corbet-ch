@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # home/kanshi.nix — `nixdisplay.dynamicOutputs`: turn declared `nixdisplay.layouts` entries into
 # kanshi profiles, so which arrangement applies is decided by WHAT IS PLUGGED IN rather than by a
 # compositor config that can only ever describe one union of every output a host might see.

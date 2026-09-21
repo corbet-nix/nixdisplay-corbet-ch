@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/monitors.nix — the FLEET-WIDE monitor registry: every physical panel this estate owns,
 # addressed by the identity its own EDID actually carries.
 #

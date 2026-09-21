@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 {
   description = "nixdisplay — the monitor registry, output layouts and dynamic (kanshi) output profiles for a declarative Wayland desktop, extracted from nixdesktop";
 

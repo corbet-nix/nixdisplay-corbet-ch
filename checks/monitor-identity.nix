@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Evaluates modules/monitors.nix for real and proves the two things it exists to get right: the
 # derived output identity, and the assertion that no two declarations can ever produce the same
 # one.

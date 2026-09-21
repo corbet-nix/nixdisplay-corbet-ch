@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/roles.nix — output role assignments: which connectors serve special functions across
 # the display topology.
 #
